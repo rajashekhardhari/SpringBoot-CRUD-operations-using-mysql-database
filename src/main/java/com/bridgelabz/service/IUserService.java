@@ -4,22 +4,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.dto.UserDTO;
 import com.bridgelabz.models.User;
 import com.bridgelabz.utility.Response;
 
 @Service
 public interface IUserService {
 
-	String addUser(User user);
+	Response addUser(UserDTO userDTO);
 
-	String deleteUser(Integer id);
+	Response deleteUser(int id);
 
-	String updateUser(int id, User user);
-	
-	List<User> findAll();
-	
-	User getUser(int Id);
-	
+	Response updateUser(int id, UserDTO userDTO);
+
+	List<UserDTO> findAll();
+
 	Response getingById(int id);
 
 }

@@ -1,36 +1,25 @@
 package com.bridgelabz.dto;
 
-public class UserDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+
+public class UserDTO {
+	@NotNull(message = "name should not be null")
 	private String name;
+	@Email(message = "invalid email")
 	private String email;
+	@Pattern(regexp = "^\\d{10}$", message = "invalid number")
 	private String number;
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
-	}
-	
-	public UserDTO(String name, String email, String number) {
-		
-		this.name = name;
-		this.email = email;
-		this.number = number;
-	}
-	
-	
-	
+
 }

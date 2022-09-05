@@ -2,6 +2,8 @@ package com.bridgelabz.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.dto.UserDTO;
-import com.bridgelabz.models.User;
 import com.bridgelabz.service.IUserService;
 import com.bridgelabz.utility.Response;
 
@@ -28,32 +29,29 @@ public class Controller {
 	private IUserService userService;
 
 	@PostMapping("/post")
-	public ResponseEntity<String> addUser(@RequestBody User user) {
-		String response = userService.addUser(user);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+	public ResponseEntity<Response> addUser(@RequestBody @Valid UserDTO userDTO) {
+		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.addUser(userDTO), HttpStatus.OK);
+		return response;
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
-		String response = userService.deleteUser(id);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+	public ResponseEntity<Response> deleteUser(@PathVariable Integer id) {
+		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.deleteUser(id), HttpStatus.OK);
+		return response;
 	}
 
-	@PutMapping("/update/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable Integer id, @RequestBody User user) {
-		String response = userService.updateUser(id, user);
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+	@PutMapping("/put/{id}")
+	public ResponseEntity<Response> updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
+		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.updateUser(id, userDTO),
+				HttpStatus.OK);
+		return response;
 	}
+
+	
 
 	@GetMapping("/get")
-	public List<User> getList() {
+	public List<UserDTO> getList() {
 		return userService.findAll();
-	}
-
-	@GetMapping("{id1}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-		ResponseEntity<User> response = new ResponseEntity<User>(userService.getUser(id), HttpStatus.OK);
-		return response;
 	}
 
 	@GetMapping("/accept")
@@ -61,4 +59,5 @@ public class Controller {
 		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.getingById(id), HttpStatus.OK);
 		return response;
 	}
+
 }

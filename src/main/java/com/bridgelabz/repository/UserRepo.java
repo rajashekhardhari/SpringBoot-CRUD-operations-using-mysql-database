@@ -10,7 +10,7 @@ import com.bridgelabz.models.User;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-	User findById(int id);
 
-	User getById(int id);
+
+	User save(Optional<User> update);
 }
