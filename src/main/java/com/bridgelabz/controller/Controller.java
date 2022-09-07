@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.dto.UserDTO;
+import com.bridgelabz.exception.ExceptionResponse;
 import com.bridgelabz.service.IUserService;
 import com.bridgelabz.utility.Response;
 
@@ -29,13 +30,13 @@ public class Controller {
 	private IUserService userService;
 
 	@PostMapping("/post")
-	public ResponseEntity<Response> addUser(@RequestBody @Valid UserDTO userDTO) {
+	public ResponseEntity<Response> addUser(@RequestBody @Valid UserDTO userDTO) throws ExceptionResponse{
 		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.addUser(userDTO), HttpStatus.OK);
 		return response;
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Response> deleteUser(@PathVariable Integer id) {
+	public ResponseEntity<Response> deleteUser(@PathVariable Integer id)throws ExceptionResponse {
 		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.deleteUser(id), HttpStatus.OK);
 		return response;
 	}
@@ -48,16 +49,16 @@ public class Controller {
 	}
 
 	
-
 	@GetMapping("/get")
-	public List<UserDTO> getList() {
+	public List<UserDTO> getList()throws ExceptionResponse {
 		return userService.findAll();
 	}
 
-	@GetMapping("/accept")
-	public ResponseEntity<Response> getUserById1(@RequestParam int id) {
-		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.getingById(id), HttpStatus.OK);
+	@GetMapping("/getdatabyid")
+	public ResponseEntity<Response> getUserById1(@RequestParam int id) throws ExceptionResponse{
+		ResponseEntity<Response> response = new ResponseEntity<Response>(userService.getById(id), HttpStatus.OK);
 		return response;
 	}
+	
 
 }

@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.dto.UserDTO;
+import com.bridgelabz.exception.ExceptionResponse;
 import com.bridgelabz.models.User;
 import com.bridgelabz.repository.UserRepo;
 import com.bridgelabz.utility.Response;
-
-
 
 @Service
 public class UserService implements IUserService {
@@ -26,8 +25,13 @@ public class UserService implements IUserService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public Response addUser(UserDTO userDTO) {
+	public Response addUser(UserDTO userDTO) throws ExceptionResponse {
 		User user = modelMapper.map(userDTO, User.class);
+		String find = userDTO.getEmail();
+		if (find.matches(user.getEmail())) {
+			throw new ExceptionResponse(
+					String.format(" User Email ID has been already entered in the Database"));
+		}
 		User addU = userRepo.save(user);
 		Response response = new Response("The response message : User Information Sucessfully added to the DataBase",
 				200, addU);
@@ -35,10 +39,15 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public Response deleteUser(int id) {
+	public Response deleteUser(int id) throws ExceptionResponse {
+		Optional<User> find = userRepo.findById(id);
+		if (!find.isPresent()) {
+			throw new ExceptionResponse(String.format(
+					"User Details not found with id " + id + ". Kindly check the entered Information for Deleting"));
+		}
 		userRepo.deleteById(id);
 		Response response = new Response(
-				"The response message : User Information Sucessfully deleted from the DataBase", 200, null);
+				"The response message : User Information Sucessfully deleted from the DataBase", 200, id);
 		return response;
 	}
 
@@ -58,19 +67,24 @@ public class UserService implements IUserService {
 	public List<UserDTO> findAll() {
 		List<User> user = userRepo.findAll();
 		Type userType = new TypeToken<List<UserDTO>>() {
-			
+
 		}.getType();
-		List<UserDTO>UserDTO = modelMapper.map(user, userType);
+		List<UserDTO> UserDTO = modelMapper.map(user, userType);
 		return UserDTO;
 	}
 
 	@Override
-	public Response getingById(int id) {
-		Optional<User> user = userRepo.findById(id);
-		UserDTO userDTO12 = modelMapper.map(user, UserDTO.class);
-		Response response = new Response("This is data", 200, userDTO12);
-		return response;
+	public Response getById(int id) throws ExceptionResponse {
+		Optional<User> find = userRepo.findById(id);
+		if (!find.isPresent()) {
+			throw new ExceptionResponse(
+					String.format("User not found with id " + id + ". Kindly check the entered Information"));
+		}
+		UserDTO dto = modelMapper.map(find, UserDTO.class);
+		Response response = new Response(
+				"The response message : User Information Sucessfully retrieved from the DataBase", 200, dto);
 
+		return response;
 	}
 
 }
